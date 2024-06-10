@@ -25,10 +25,13 @@ let boutonValide = document.getElementById('btnValiderTrie');
 let datePhoto = document.getElementById('datePhoto');
 let periodePhoto = document.getElementById('periodePhoto');
 let lieuPhoto = document.getElementById('lieuPhoto');
+let fixeSection = document.getElementById('SectionRegeneration');
 let ValeurLieu = '';
 let ValeurPeriode = '';
 let ValeurAnnee = '';
 boutonAfficherTout.addEventListener('click',() => {
+    fixeSection.style.display = 'flex';
+    fixeSection.style.animation = 'moveDiv';
     while (dynamicLieu.firstChild) {
         dynamicLieu.removeChild(dynamicLieu.firstChild);
     }
@@ -37,8 +40,8 @@ boutonAfficherTout.addEventListener('click',() => {
     let titre = document.createElement('h3');
     let img = document.createElement('div');
     let imageEnClair = document.createElement('img');
-    let boutonAjax = document.createElement('button');
     lesPhotos = lesPhotos;
+    
     for(let i = 0;i < TableauAnnee.length;i++){
         nvAnnee = document.createElement("div");
         titre = document.createElement('h3');
@@ -46,9 +49,7 @@ boutonAfficherTout.addEventListener('click',() => {
         img = document.createElement('div');
         img.className = "lesImages";
         nvAnnee.className = "lesAnnee";
-        boutonAjax = document.createElement('button');
-        boutonAjax.id = "ajaxButton";
-        boutonAjax.textContent = "Générer d'autres images";
+        
         for(let j = 0;j < lesPhotos.length;j++){
             if(lesPhotos[j].annee == TableauAnnee[i]){        
                 imageEnClair = document.createElement('img');
@@ -60,23 +61,10 @@ boutonAfficherTout.addEventListener('click',() => {
         }
         nvAnnee.appendChild(titre);
         nvAnnee.appendChild(img);
-        nvAnnee.appendChild(boutonAjax);
         dynamicLieu.appendChild(nvAnnee);
         dynamicLieu.scrollIntoView({behavior: 'smooth'})
     }
-    document.getElementById('ajaxButton').addEventListener('click', function() {
-        fetch('/get-photo')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('La requête a échoué avec le statut ' + response.status);
-                }
-                return response.json();
-            }).then(data => {
-                // Traiter les données ici
-                console.log(data);
-            })
-            console.log('cest cliqué');
-    });
+
 })
 boutonQuitte.addEventListener('click',()=>{
     menuTrie.style.display = 'none';
@@ -84,6 +72,21 @@ boutonQuitte.addEventListener('click',()=>{
 boutonTrie.addEventListener('click',()=>{
     menuTrie.style.display = 'flex';
 });
+
+document.getElementById('ajaxButton').addEventListener('click', function() {
+    fetch('/get-photo')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('La requête a échoué avec le statut ' + response.status);
+            }
+            return response.json();
+        }).then(data => {
+            // Traiter les données ici
+            console.log(data);
+        })
+        console.log('cest cliqué');
+});
+
 lesPhotos = lesPhotos
 boutonValide.addEventListener('click',()=>{
     while (dynamicLieu.firstChild) {

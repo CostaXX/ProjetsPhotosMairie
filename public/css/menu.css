@@ -1,6 +1,5 @@
 nav{
     display: flex;
-    position: fixed;
     width: 100vw;
     height: 20vh;
     background-color: rgb(231 203 18);

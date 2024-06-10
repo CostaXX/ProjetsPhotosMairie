@@ -1,7 +1,17 @@
 .container{
     display: block;
-    padding-top: 20vh;
     height: 90vh;
+}
+
+#SectionRegeneration{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    background: aqua;
 }
 
 .elementPrincipale{
@@ -81,6 +91,7 @@
     transition: all 0.3s ease-in;
     border-radius: 10px;
     cursor: pointer;
+    height: 50px;
 }
 
 @media (max-width: 550px) {
