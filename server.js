@@ -3,9 +3,25 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
+const mysql = require('mysql2'); // ou utilisez 'mysql2' si vous avez installé mysql2
+let lesPhotosDeBDD = [];
 
 // Middleware pour servir les fichiers statiques
 app.use(express.static('public'));
+
+const pool = mysql.createPool({
+    host: 'localhost', 
+    user: 'root',      
+    password: '',      
+    database: 'photos', 
+    waitForConnections: true,
+    connectionLimit: 10, // Limite le nombre de connexions simultanées
+    queueLimit: 0
+});
+
+
+// Établissez la connexion
+
 
 const photos = [
     '/images/photo1.jpg',
@@ -17,31 +33,26 @@ app.use(cookieParser());
 
 // Route pour gérer les requêtes AJAX
 app.get('/get-photo', (req, res) => {
-    let viewedPhotos = req.cookies.viewedPhotos ? JSON.parse(req.cookies.viewedPhotos) : [];
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error('Erreur de connexion : ' + err.stack);
+            return res.status(500).send('Erreur de connexion à la base de données');
+        }
 
-    // Filtrer les photos non encore vues par le client
-    let availablePhotos = photos.filter(photo => !viewedPhotos.includes(photo));
+        connection.query('SELECT chemin FROM photo', (error, results) => {
+            connection.release(); // Toujours libérer la connexion après utilisation
 
-    if (availablePhotos.length === 0) {
-        // Si toutes les photos ont été vues, réinitialiser la liste
-        viewedPhotos = [];
-        availablePhotos = photos;
-    }
+            if (error) {
+                console.error('Erreur lors de la requête : ' + error.stack);
+                return res.status(500).send('Erreur lors de l\'exécution de la requête');
+            }
 
-    // Sélectionner une nouvelle photo aléatoire
-    const newPhoto = availablePhotos[Math.floor(Math.random() * availablePhotos.length)];
+            const lesPhotosDeBDD = results.map(result => result.chemin);
+            console.log(lesPhotosDeBDD);
 
-    // Ajouter la nouvelle photo à la liste des vues
-    viewedPhotos.push(newPhoto);
-
-    // Mettre à jour le cookie sans définir maxAge ou expires pour créer un cookie de session
-    res.cookie('viewedPhotos', JSON.stringify(viewedPhotos), { 
-        httpOnly: true, 
-        secure: true 
+            res.json(lesPhotosDeBDD);
+        });
     });
-
-    // Envoyer la nouvelle photo
-    res.json({ photo: newPhoto });
 });
 
 
@@ -50,32 +61,3 @@ app.get('/get-photo', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
-
-// Importez le module mysql ou mysql2
-const mysql = require('mysql2'); // ou utilisez 'mysql2' si vous avez installé mysql2
-
-// Créez une connexion à la base de données
-const connection = mysql.createConnection({
-    host: 'localhost', // Adresse de l'hôte, habituellement 'localhost' pour XAMPP
-    user: 'root',      // Nom d'utilisateur MySQL, 'root' par défaut pour XAMPP
-    password: '',      // Mot de passe MySQL, vide par défaut pour XAMPP
-    database: 'test' // Remplacez par le nom de votre base de données
-});
-
-// Établissez la connexion
-connection.connect((err) => {
-    if (err) {
-        console.error('Erreur de connexion : ' + err.stack);
-        return;
-    }
-    console.log('Connecté en tant que ID ' + connection.threadId);
-});
-
-// Exemple de requête pour vérifier la connexion
-connection.query('SELECT 1 + 1 AS solution', (error, results, fields) => {
-    if (error) throw error;
-    console.log('La solution est : ', results[0].solution);
-});
-
-// Fermez la connexion
-connection.end();

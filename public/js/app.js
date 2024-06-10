@@ -63,22 +63,20 @@ boutonAfficherTout.addEventListener('click',() => {
         nvAnnee.appendChild(boutonAjax);
         dynamicLieu.appendChild(nvAnnee);
         dynamicLieu.scrollIntoView({behavior: 'smooth'})
-        document.getElementById('ajaxButton').addEventListener('click', function() {
-            fetch('/get-photo')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('La requête a échoué avec le statut ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // document.getElementById('response').innerText = data.message;
-                })
-                .catch(error => {
-                    // console.error('Une erreur est survenue:'+ error);
-                });
-        });
     }
+    document.getElementById('ajaxButton').addEventListener('click', function() {
+        fetch('/get-photo')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('La requête a échoué avec le statut ' + response.status);
+                }
+                return response.json();
+            }).then(data => {
+                // Traiter les données ici
+                console.log(data);
+            })
+            console.log('cest cliqué');
+    });
 })
 boutonQuitte.addEventListener('click',()=>{
     menuTrie.style.display = 'none';
