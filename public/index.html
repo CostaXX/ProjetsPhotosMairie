@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>photos Mairie</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/font.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/accueil.css">
+</head>
+<body>
+    <nav>
+        <img src="/img/Logo/Logo MLN 2023 COUL.webp" alt="">
+        <div style="display: flex;align-items: center;">    
+            <h1>Mairie de Moussy Le Neuf</h1>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="elementPrincipale">
+            <h2>Ma ville en image</h2>
+            <button id="btnAll">Voir toutes les photos</button>
+            <button id="btnTrie">Trier</button>
+        </div>
+    </div>
+    <section class="AllPhotos" id="champDynamique">
+        <!-- <div class="lesCategories"></div> -->
+    </section>
+
+    <section class="trie" id="MenuTrie">
+        <div class="form">
+            <h2>choisissez vos filtres</h2>
+                <div class="allFormElement">
+                    <div class="selectElement">    
+                        <label for="datePhoto">Date</label>
+                        <select name="date" id="datePhoto">
+                            <option value="">...</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                        </select>
+                    </div>
+                    <div class="selectElement">
+                        <label for="periodePhoto">Periode</label>
+                        <select name="periode" id="periodePhoto">
+                            <option value="">...</option>
+                            <option value="printemps">Printemps</option>
+                            <option value="ete">été</option>
+                            <option value="hiver">Hiver</option>
+                            <option value="automne">Automne</option>
+                        </select>
+                    </div>
+                    <div class="selectElement">
+                        <label for="lieuPhoto">Lieu</label>
+                        <select name="lieu" id="lieuPhoto">
+                            <option value="">...</option>
+                            <option value="lac">Lac</option>
+                            <option value="quartierChic">Quartier chic</option>
+                            <option value="rue">rue</option>
+                        </select>
+                    </div> 
+                </div>
+                <button id="btnValiderTrie">valider</button>
+        </div>
+        <button id="QuitBtn">quitter</button>
+    </section>
+    <script src="/js/app.js"></script>
+    <script src="/js/aj.js"></script>
+</body>
+</html>

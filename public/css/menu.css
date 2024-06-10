@@ -1,0 +1,15 @@
+nav{
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 20vh;
+    background-color: rgb(231 203 18);
+    justify-content: space-between;
+    padding-right: 10%;
+    z-index: 9;
+}
+
+nav h1{
+    padding-block: 50px;
+    color:aliceblue;
+}

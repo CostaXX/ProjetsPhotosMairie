@@ -1,0 +1,201 @@
+.container{
+    display: block;
+    padding-top: 20vh;
+    height: 90vh;
+}
+
+.elementPrincipale{
+    margin: 4% 15% auto;
+    display: flex;
+    background-color: rgba(68, 68, 245, 0.295);
+    border-radius: 10px;
+    height: 80%;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    min-width: 240px;
+}
+
+#btnAll,#btnTrie{
+    padding: 10px;
+    border: none;
+    background-color: rgb(85, 85, 245);
+    color: aliceblue;
+    transition: all 0.3s ease-in;
+    border-radius: 10px;
+    width: 300px;
+    font-size: 1.5em;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.61);
+    cursor: pointer; 
+}
+
+#btnAll:hover,#btnTrie:hover,#btnValiderTrie:hover{
+    background-color: blue;
+}
+
+#btnAll:active,#btnTrie:active,#btnValiderTrie:active{
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
+}
+
+#QuitBtn{
+    padding: 10px;
+    background-color: rgb(255, 83, 83);
+    color: aliceblue;
+    border-radius: 10px;
+    font-size: 1.5em;
+    cursor: pointer; 
+    border: none;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.61);
+    transition: all 0.3s ease-in;
+}
+
+#btnValiderTrie{
+    padding: 10px;
+    min-width: 90px;
+    margin: 0 30%;
+    font-size: 1.5em;
+    border-radius: 10px;
+    cursor: pointer; 
+    border: none;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.61);
+    transition: all 0.3s ease-in;
+    background-color: rgb(85, 85, 245);
+    color: aliceblue;
+}
+
+#QuitBtn:hover{
+    background-color: rgb(255, 0, 0);
+}
+
+#QuitBtn:active,#ajaxButton:active{
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
+}
+
+#ajaxButton{
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.61);
+    font-size: 1.5em;
+    padding: 10px;
+    border: none;
+    background-color: rgb(197 219 0);
+    color: beige;
+    transition: all 0.3s ease-in;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+@media (max-width: 550px) {
+    #btnAll,#btnTrie{
+        width: 150px;
+    }
+}
+
+@media (max-width: 400px) {
+    .elementPrincipale{
+        margin: 10px 5px auto;
+    }
+}
+
+/* section Toute les photos */
+
+.lesAnnee{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: #e7e7e7;;
+    margin-block: 10px;
+    padding: 10px;
+    animation: moveDiv 1.5s backwards;
+}
+
+.lesImages{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    height: 330px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    height: 100%;
+    z-index: 0;
+}
+
+.lesImages::-webkit-scrollbar{
+    visibility: hidden;
+}
+
+.lesImages div{
+    width: 300px;
+    height: 300px;
+    box-shadow:  4px 4px 5px rgba(0, 0, 0, 0.61);
+    border-radius: 5px;
+    margin-block: 10px;
+}
+
+.lesImages div img{
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* section tri */
+
+.trie{
+    position: fixed;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 9;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #737373c7;
+}
+
+select{
+    width:110px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.trie .form{
+    width: 70%;
+    height: 460px;
+    background-color: rgb(255, 230, 0);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.allFormElement{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.selectElement{
+    display: flex;
+    justify-content: space-between;
+    width: 240px;
+}
+
+/* Animation */
+
+@keyframes moveDiv {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
