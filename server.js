@@ -4,10 +4,6 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 const mysql = require('mysql2'); // ou utilisez 'mysql2' si vous avez installé mysql2
-let lesPhotosDeBDD = [];
-
-// Middleware pour servir les fichiers statiques
-app.use(express.static('public'));
 
 const pool = mysql.createPool({
     host: 'localhost', 
@@ -19,16 +15,9 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+// Middleware pour servir les fichiers statiques
+app.use(express.static('public'));
 
-// Établissez la connexion
-
-
-const photos = [
-    '/images/photo1.jpg',
-    '/images/photo2.jpg',
-    '/images/photo3.jpg',
-    // Ajoutez autant de photos que nécessaire
-];
 app.use(cookieParser());
 
 // Route pour gérer les requêtes AJAX
@@ -54,8 +43,6 @@ app.get('/get-photo', (req, res) => {
         });
     });
 });
-
-
 
 // Démarrer le serveur
 app.listen(port, () => {
