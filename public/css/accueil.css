@@ -11,7 +11,12 @@
     justify-content: center;
     align-items: center;
     height: 10%;
-    background: aqua;
+    background: rgba(128, 128, 128, 0.5); /* Gris avec une transparence de 50% */
+    backdrop-filter: blur(10px); /* Ajoute un flou à l'arrière-plan */
+}
+
+.animRegeneration{
+    animation: moveDivBas 1.5s backwards;
 }
 
 .elementPrincipale{
@@ -119,6 +124,10 @@
     animation: moveDiv 1.5s backwards;
 }
 
+.AllPhotos{
+    margin-bottom: 10%;
+}
+
 .lesImages{
     display: flex;
     justify-content: space-evenly;
@@ -208,5 +217,16 @@ select{
     100% {
         opacity: 1;
         transform: translateX(0px);
+    }
+}
+
+@keyframes moveDivBas {
+    0% {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
     }
 }

@@ -31,7 +31,7 @@ let ValeurPeriode = '';
 let ValeurAnnee = '';
 boutonAfficherTout.addEventListener('click',() => {
     fixeSection.style.display = 'flex';
-    fixeSection.style.animation = 'moveDiv';
+    fixeSection.classList.toggle('animRegeneration')
     while (dynamicLieu.firstChild) {
         dynamicLieu.removeChild(dynamicLieu.firstChild);
     }
@@ -89,6 +89,8 @@ document.getElementById('ajaxButton').addEventListener('click', function() {
 
 lesPhotos = lesPhotos
 boutonValide.addEventListener('click',()=>{
+    fixeSection.style.display = 'flex';
+    fixeSection.classList.toggle('animRegeneration')
     while (dynamicLieu.firstChild) {
         dynamicLieu.removeChild(dynamicLieu.firstChild);
     }
