@@ -20,7 +20,7 @@ app.use(express.static('public'));
 
 app.use(cookieParser());
 
-app.get('/api/dates', (req, res) => {
+app.get('/api/trie', (req, res) => {
     pool.getConnection((err, connection) => {
         if (err) {
             console.error('Erreur de connexion : ' + err.stack);
@@ -67,6 +67,10 @@ app.get('/api/dates', (req, res) => {
         
         
     });
+});
+
+app.get('/get-photo-trier', (req, res) => {
+
 });
 
 // Route pour gérer les requêtes AJAX

@@ -1,20 +1,14 @@
 class photos {
-    constructor(nom,lieux,source,annee,periode){
-        this.nom = nom,
+    constructor(id,lieux,source,annee,periode){
+        this.id = id,
         this.lieux = lieux,
         this.annee = annee
         this.source = source
         this.periode = periode
     }
 }
-let poto1 = new photos('sfgd','lac','img/Hiver_2019/IMG_1647.jpg',2022,'hiver');
-let poto2 = new photos('sfgd','rue','img/Hiver_2019/IMG_1648.jpg',2023,'printemps');
-let poto3 = new photos('sfgd','quartierChic','img/Hiver_2019/IMG_1649.jpg',2021,'ete');
-let poto5 = new photos('sfgd','lac','img/Hiver_2019/IMG_1650.jpg',2022,'automne');
-let poto6 = new photos('sfgd','rue','img/Hiver_2019/IMG_1646.jpg',2021,'printemps');
-let poto9 = new photos('sfgd','quartierChic','img/Hiver_2019/IMGP4457.JPG',2023,'printemps');
-let poto10 = new photos('sfgd','quartierChic','img/Hiver_2019/IMGP4457.JPG',2021,'printemps');
-let lesPhotos = [poto1,poto2,poto3,poto5,poto6,poto9,poto10];
+
+// let lesPhotos = [poto1,poto2,poto3,poto5,poto6,poto9,poto10];
 let lesPhotosChoisis = [];
 let dynamicLieu = document.getElementById('champDynamique');
 let boutonTrie = document.getElementById('btnTrie');
@@ -29,11 +23,12 @@ let fixeSection = document.getElementById('SectionRegeneration');
 let ValeurLieu = '';
 let ValeurPeriode = '';
 let ValeurAnnee = '';
-const rep = fetch('/api/dates').then(response => response.json())
+const repApiTrieElement = fetch('/api/trie').then(response => response.json());
+const rep = fetch('/get-photo-trier').then(response => response.json());
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    rep.then(data => {
+    repApiTrieElement.then(data => {
             let categDate = document.getElementById('datePhoto')
             let lesDates;
             for(let i = 0;i < data.dates.length;i++){
@@ -62,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => {
             console.error('Erreur lors de la récupération des dates:', error);
         });
-    
     boutonAfficherTout.addEventListener('click',() => {
         fixeSection.style.display = 'flex';
         fixeSection.classList.toggle('animRegeneration')
@@ -123,19 +117,20 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('cest cliqué');
     });
     
-    lesPhotos = lesPhotos
+    // lesPhotos = lesPhotos
     boutonValide.addEventListener('click',()=>{
         fixeSection.style.display = 'flex';
         fixeSection.classList.toggle('animRegeneration')
         while (dynamicLieu.firstChild) {
             dynamicLieu.removeChild(dynamicLieu.firstChild);
         }
-        lesPhotos = [poto1,poto2,poto3,poto5,poto6,poto9,poto10];
+        lesPhotos = [];
         lesPhotosChoisis.length = 0;
         menuTrie.style.display = 'none';
         ValeurAnnee = datePhoto.value;
         ValeurLieu = lieuPhoto.value;
         ValeurPeriode = periodePhoto.value;
+
         if( ValeurAnnee.length != 0 && ValeurLieu.length != 0 && ValeurPeriode.length != 0){
             for(let i = 0;i < lesPhotos.length;i++){
                 if(lesPhotos[i].annee == ValeurAnnee && lesPhotos[i].lieux == ValeurLieu && lesPhotos[i].periode == ValeurPeriode){
