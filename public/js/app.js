@@ -24,7 +24,7 @@ let ValeurLieu = '';
 let ValeurPeriode = '';
 let ValeurAnnee = '';
 const repApiTrieElement = fetch('/api/trie').then(response => response.json());
-const rep = fetch('/get-photo-trier').then(response => response.json());
+// const rep = fetch('/get-photo-trier').then(response => response.json());
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -127,10 +127,34 @@ document.addEventListener('DOMContentLoaded', () => {
         lesPhotos = [];
         lesPhotosChoisis.length = 0;
         menuTrie.style.display = 'none';
+
         ValeurAnnee = datePhoto.value;
         ValeurLieu = lieuPhoto.value;
         ValeurPeriode = periodePhoto.value;
 
+        const formData = {
+            annee : ValeurAnnee,
+            lieu : ValeurLieu,
+            periode : ValeurPeriode
+        }
+        console.log(ValeurAnnee);
+        console.log(ValeurLieu);
+        console.log(ValeurPeriode);
+        console.log(formData);
+        fetch('/get-photo-trier', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Succès:', data);
+        })
+        .catch((error) => {
+            console.error('Erreur:', error);
+        });
         if( ValeurAnnee.length != 0 && ValeurLieu.length != 0 && ValeurPeriode.length != 0){
             for(let i = 0;i < lesPhotos.length;i++){
                 if(lesPhotos[i].annee == ValeurAnnee && lesPhotos[i].lieux == ValeurLieu && lesPhotos[i].periode == ValeurPeriode){

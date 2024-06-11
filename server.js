@@ -1,5 +1,6 @@
 // server.js
 const express = require('express');
+const bodyParser = require('body-parser'); 
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
@@ -16,8 +17,9 @@ const pool = mysql.createPool({
 });
 
 // Middleware pour servir les fichiers statiques
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static('public'));
-
 app.use(cookieParser());
 
 app.get('/api/trie', (req, res) => {
@@ -69,8 +71,16 @@ app.get('/api/trie', (req, res) => {
     });
 });
 
-app.get('/get-photo-trier', (req, res) => {
+app.post('/get-photo-trier', (req, res) => {
+    console.log(req.body);
+    const { annee, lieu, periode } = req.body;
+    console.log('Année:', annee);
+    console.log('Lieu:', lieu);
+    console.log('Période:', periode);
 
+    // Traitez les données comme vous le souhaitez (par exemple, en les enregistrant dans une base de données)
+    
+    res.json({ message: 'Données reçues avec succès' });
 });
 
 // Route pour gérer les requêtes AJAX
