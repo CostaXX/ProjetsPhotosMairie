@@ -11,8 +11,8 @@
     justify-content: center;
     align-items: center;
     height: 10%;
-    background: rgba(128, 128, 128, 0.5); /* Gris avec une transparence de 50% */
-    backdrop-filter: blur(10px); /* Ajoute un flou à l'arrière-plan */
+    background: rgba(255, 255, 255, 0.3); /* Gris avec une transparence de 50% */
+    backdrop-filter: blur(5px); /* Ajoute un flou à l'arrière-plan */
 }
 
 .animRegeneration{

@@ -20,6 +20,55 @@ app.use(express.static('public'));
 
 app.use(cookieParser());
 
+app.get('/api/dates', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error('Erreur de connexion : ' + err.stack);
+            return res.status(500).send('Erreur de connexion à la base de données');
+        }
+        
+        connection.query('SELECT DISTINCT date FROM photo ORDER BY date DESC', (error, results) => {
+            connection.release(); // Toujours libérer la connexion après utilisation
+
+        if (error) {
+            console.error('Erreur lors de la requête : ' + error.stack);
+            return res.status(500).send('Erreur lors de l\'exécution de la requête');
+        }
+
+        const lesDate = results.map(result => result.date);
+        console.log(lesDate);
+
+        
+            connection.query('SELECT DISTINCT periode FROM photo', (error, results) => {
+                connection.release(); // Toujours libérer la connexion après utilisation
+
+                if (error) {
+                    console.error('Erreur lors de la requête : ' + error.stack);
+                    return res.status(500).send('Erreur lors de l\'exécution de la requête');
+                }
+
+                const lesPeriode = results.map(result => result.periode);
+                console.log(lesPeriode);
+                connection.query('SELECT DISTINCT lieu FROM photo', (error, results) => {
+                    connection.release(); // Toujours libérer la connexion après utilisation
+    
+                    if (error) {
+                        console.error('Erreur lors de la requête : ' + error.stack);
+                        return res.status(500).send('Erreur lors de l\'exécution de la requête');
+                    }
+    
+                    const lesLieux = results.map(result => result.lieu);
+                    console.log(lesLieux);
+                    res.json({ dates: lesDate, periodes: lesPeriode, lieux: lesLieux });
+                });
+            });
+        });
+
+        
+        
+    });
+});
+
 // Route pour gérer les requêtes AJAX
 app.get('/get-photo', (req, res) => {
     pool.getConnection((err, connection) => {

@@ -29,154 +29,191 @@ let fixeSection = document.getElementById('SectionRegeneration');
 let ValeurLieu = '';
 let ValeurPeriode = '';
 let ValeurAnnee = '';
-boutonAfficherTout.addEventListener('click',() => {
-    fixeSection.style.display = 'flex';
-    fixeSection.classList.toggle('animRegeneration')
-    while (dynamicLieu.firstChild) {
-        dynamicLieu.removeChild(dynamicLieu.firstChild);
-    }
-    let TableauAnnee = [2021,2022,2023];
-    let nvAnnee = document.createElement("div");
-    let titre = document.createElement('h3');
-    let img = document.createElement('div');
-    let imageEnClair = document.createElement('img');
-    lesPhotos = lesPhotos;
+const rep = fetch('/api/dates').then(response => response.json())
+
+document.addEventListener('DOMContentLoaded', () => {
     
-    for(let i = 0;i < TableauAnnee.length;i++){
-        nvAnnee = document.createElement("div");
-        titre = document.createElement('h3');
-        titre.textContent = TableauAnnee[i];
-        img = document.createElement('div');
-        img.className = "lesImages";
-        nvAnnee.className = "lesAnnee";
-        
-        for(let j = 0;j < lesPhotos.length;j++){
-            if(lesPhotos[j].annee == TableauAnnee[i]){        
-                imageEnClair = document.createElement('img');
-                surImage = document.createElement('div');
-                imageEnClair.src = lesPhotos[j].source;
-                surImage.appendChild(imageEnClair)
-                img.appendChild(surImage)
+    rep.then(data => {
+            let categDate = document.getElementById('datePhoto')
+            let lesDates;
+            for(let i = 0;i < data.dates.length;i++){
+                lesDates = document.createElement('option');
+                lesDates.textContent = data.dates[i];
+                lesDates.value = data.dates[i];
+                categDate.appendChild(lesDates);
             }
-        }
-        nvAnnee.appendChild(titre);
-        nvAnnee.appendChild(img);
-        dynamicLieu.appendChild(nvAnnee);
-        dynamicLieu.scrollIntoView({behavior: 'smooth'})
-    }
-
-})
-boutonQuitte.addEventListener('click',()=>{
-    menuTrie.style.display = 'none';
-});
-boutonTrie.addEventListener('click',()=>{
-    menuTrie.style.display = 'flex';
-});
-
-document.getElementById('ajaxButton').addEventListener('click', function() {
-    fetch('/get-photo')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('La requête a échoué avec le statut ' + response.status);
+            let categPeriode = document.getElementById('periodePhoto')
+            let lesPeriodes;
+            for(let i = 0;i < data.periodes.length;i++){
+                lesPeriodes = document.createElement('option');
+                lesPeriodes.textContent = data.periodes[i];
+                lesPeriodes.value = data.periodes[i];
+                categPeriode.appendChild(lesPeriodes);
             }
-            return response.json();
-        }).then(data => {
-            // Traiter les données ici
-            console.log(data);
+            let categLieu = document.getElementById('lieuPhoto')
+            let lesLieux;
+            for(let i = 0;i < data.lieux.length;i++){
+                lesLieux = document.createElement('option');
+                lesLieux.textContent = data.lieux[i];
+                lesLieux.value = data.lieux[i];
+                categLieu.appendChild(lesLieux);
+            }
         })
-        console.log('cest cliqué');
-});
-
-lesPhotos = lesPhotos
-boutonValide.addEventListener('click',()=>{
-    fixeSection.style.display = 'flex';
-    fixeSection.classList.toggle('animRegeneration')
-    while (dynamicLieu.firstChild) {
-        dynamicLieu.removeChild(dynamicLieu.firstChild);
-    }
-    lesPhotos = [poto1,poto2,poto3,poto5,poto6,poto9,poto10];
-    lesPhotosChoisis.length = 0;
-    menuTrie.style.display = 'none';
-    ValeurAnnee = datePhoto.value;
-    ValeurLieu = lieuPhoto.value;
-    ValeurPeriode = periodePhoto.value;
-    if( ValeurAnnee.length != 0 && ValeurLieu.length != 0 && ValeurPeriode.length != 0){
-        for(let i = 0;i < lesPhotos.length;i++){
-            if(lesPhotos[i].annee == ValeurAnnee && lesPhotos[i].lieux == ValeurLieu && lesPhotos[i].periode == ValeurPeriode){
-                lesPhotosChoisis.push(lesPhotos[i]);
+        .catch(error => {
+            console.error('Erreur lors de la récupération des dates:', error);
+        });
+    
+    boutonAfficherTout.addEventListener('click',() => {
+        fixeSection.style.display = 'flex';
+        fixeSection.classList.toggle('animRegeneration')
+        while (dynamicLieu.firstChild) {
+            dynamicLieu.removeChild(dynamicLieu.firstChild);
+        }
+        rep.then(data =>{
+            let nvAnnee = document.createElement("div");
+            let titre = document.createElement('h3');
+            let img = document.createElement('div');
+            let imageEnClair = document.createElement('img');
+            lesPhotos = lesPhotos;
+            let TableauAnnee = data.dates;
+            console.log(TableauAnnee);
+            for(let i = 0;i < TableauAnnee.length;i++){
+                nvAnnee = document.createElement("div");
+                titre = document.createElement('h3');
+                titre.textContent = TableauAnnee[i];
+                img = document.createElement('div');
+                img.className = "lesImages";
+                nvAnnee.className = "lesAnnee";
+                
+                for(let j = 0;j < lesPhotos.length;j++){
+                    if(lesPhotos[j].annee == TableauAnnee[i]){        
+                        imageEnClair = document.createElement('img');
+                        surImage = document.createElement('div');
+                        imageEnClair.src = lesPhotos[j].source;
+                        surImage.appendChild(imageEnClair)
+                        img.appendChild(surImage)
+                    }
+                }
+                nvAnnee.appendChild(titre);
+                nvAnnee.appendChild(img);
+                dynamicLieu.appendChild(nvAnnee);
+                dynamicLieu.scrollIntoView({behavior: 'smooth'})
+            }
+        });
+    
+    })
+    boutonQuitte.addEventListener('click',()=>{
+        menuTrie.style.display = 'none';
+    });
+    boutonTrie.addEventListener('click',()=>{
+        menuTrie.style.display = 'flex';
+    });
+    
+    document.getElementById('ajaxButton').addEventListener('click', function() {
+        fetch('/get-photo')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('La requête a échoué avec le statut ' + response.status);
+                }
+                return response.json();
+            }).then(data => {
+                // Traiter les données ici
+                console.log(data);
+            })
+            console.log('cest cliqué');
+    });
+    
+    lesPhotos = lesPhotos
+    boutonValide.addEventListener('click',()=>{
+        fixeSection.style.display = 'flex';
+        fixeSection.classList.toggle('animRegeneration')
+        while (dynamicLieu.firstChild) {
+            dynamicLieu.removeChild(dynamicLieu.firstChild);
+        }
+        lesPhotos = [poto1,poto2,poto3,poto5,poto6,poto9,poto10];
+        lesPhotosChoisis.length = 0;
+        menuTrie.style.display = 'none';
+        ValeurAnnee = datePhoto.value;
+        ValeurLieu = lieuPhoto.value;
+        ValeurPeriode = periodePhoto.value;
+        if( ValeurAnnee.length != 0 && ValeurLieu.length != 0 && ValeurPeriode.length != 0){
+            for(let i = 0;i < lesPhotos.length;i++){
+                if(lesPhotos[i].annee == ValeurAnnee && lesPhotos[i].lieux == ValeurLieu && lesPhotos[i].periode == ValeurPeriode){
+                    lesPhotosChoisis.push(lesPhotos[i]);
+                }
+            }
+        }else if(ValeurAnnee.length == 0 && ValeurLieu.length == 0 && ValeurPeriode.length == 0){
+            lesPhotosChoisis = lesPhotos
+        }else{
+            if(ValeurAnnee.length == 0 && ValeurLieu.length == 0 && ValeurPeriode.length != 0){
+                for(let i = 0;i < lesPhotos.length;i++){
+                    if(lesPhotos[i].periode == ValeurPeriode){
+                        lesPhotosChoisis.push(lesPhotos[i]);
+                    }
+                }
+            }else if(ValeurAnnee.length == 0 && ValeurLieu.length != 0 && ValeurPeriode.length == 0){
+                for(let i = 0;i < lesPhotos.length;i++){
+                    if(lesPhotos[i].lieux == ValeurLieu){
+                        lesPhotosChoisis.push(lesPhotos[i]);
+                    }
+                }
+            }else if(ValeurAnnee.length == 0 && ValeurLieu.length != 0 && ValeurPeriode.length != 0){
+                for(let i = 0;i < lesPhotos.length;i++){
+                    if(lesPhotos[i].lieux == ValeurLieu && lesPhotos[i].periode == ValeurPeriode){
+                        lesPhotosChoisis.push(lesPhotos[i]);
+                    }
+                }
+            }else if(ValeurAnnee.length != 0 && ValeurLieu.length == 0 && ValeurPeriode.length == 0){
+                for(let i = 0;i < lesPhotos.length;i++){
+                    if(lesPhotos[i].annee == ValeurAnnee){
+                        lesPhotosChoisis.push(lesPhotos[i]);
+                    }
+                }
+            }else if(ValeurAnnee.length != 0 && ValeurLieu.length == 0 && ValeurPeriode.length != 0){
+                for(let i = 0;i < lesPhotos.length;i++){
+                    if(lesPhotos[i].annee == ValeurAnnee && lesPhotos[i].periode == ValeurPeriode){
+                        lesPhotosChoisis.push(lesPhotos[i]);
+                    }
+                }
+            }else if(ValeurAnnee.length != 0 && ValeurLieu.length != 0 && ValeurPeriode.length == 0){
+                for(let i = 0;i < lesPhotos.length;i++){
+                    if(lesPhotos[i].annee == ValeurAnnee && lesPhotos[i].lieux == ValeurLieu){
+                        lesPhotosChoisis.push(lesPhotos[i]);
+                    }
+                }
             }
         }
-    }else if(ValeurAnnee.length == 0 && ValeurLieu.length == 0 && ValeurPeriode.length == 0){
-        lesPhotosChoisis = lesPhotos
-    }else{
-        if(ValeurAnnee.length == 0 && ValeurLieu.length == 0 && ValeurPeriode.length != 0){
-            for(let i = 0;i < lesPhotos.length;i++){
-                if(lesPhotos[i].periode == ValeurPeriode){
-                    lesPhotosChoisis.push(lesPhotos[i]);
-                }
-            }
-        }else if(ValeurAnnee.length == 0 && ValeurLieu.length != 0 && ValeurPeriode.length == 0){
-            for(let i = 0;i < lesPhotos.length;i++){
-                if(lesPhotos[i].lieux == ValeurLieu){
-                    lesPhotosChoisis.push(lesPhotos[i]);
-                }
-            }
-        }else if(ValeurAnnee.length == 0 && ValeurLieu.length != 0 && ValeurPeriode.length != 0){
-            for(let i = 0;i < lesPhotos.length;i++){
-                if(lesPhotos[i].lieux == ValeurLieu && lesPhotos[i].periode == ValeurPeriode){
-                    lesPhotosChoisis.push(lesPhotos[i]);
-                }
-            }
-        }else if(ValeurAnnee.length != 0 && ValeurLieu.length == 0 && ValeurPeriode.length == 0){
-            for(let i = 0;i < lesPhotos.length;i++){
-                if(lesPhotos[i].annee == ValeurAnnee){
-                    lesPhotosChoisis.push(lesPhotos[i]);
-                }
-            }
-        }else if(ValeurAnnee.length != 0 && ValeurLieu.length == 0 && ValeurPeriode.length != 0){
-            for(let i = 0;i < lesPhotos.length;i++){
-                if(lesPhotos[i].annee == ValeurAnnee && lesPhotos[i].periode == ValeurPeriode){
-                    lesPhotosChoisis.push(lesPhotos[i]);
-                }
-            }
-        }else if(ValeurAnnee.length != 0 && ValeurLieu.length != 0 && ValeurPeriode.length == 0){
-            for(let i = 0;i < lesPhotos.length;i++){
-                if(lesPhotos[i].annee == ValeurAnnee && lesPhotos[i].lieux == ValeurLieu){
-                    lesPhotosChoisis.push(lesPhotos[i]);
-                }
-            }
+        let TableauAnnee = [];
+        let nvAnnee = document.createElement("div");
+        let titre = document.createElement('h3');
+        let img = document.createElement('div');
+        let imageEnClair = document.createElement('img');
+        for(let i = 0; i < lesPhotosChoisis.length; i++){
+            TableauAnnee.push(lesPhotosChoisis[i].annee);
         }
-    }
-    let TableauAnnee = [];
-    let nvAnnee = document.createElement("div");
-    let titre = document.createElement('h3');
-    let img = document.createElement('div');
-    let imageEnClair = document.createElement('img');
-    for(let i = 0; i < lesPhotosChoisis.length; i++){
-        TableauAnnee.push(lesPhotosChoisis[i].annee);
-    }
-    TableauAnnee = [...new Set(TableauAnnee)];
-    TableauAnnee = TableauAnnee.sort((a, b) => a - b);
-    for(let i = 0;i < TableauAnnee.length;i++){
-        nvAnnee = document.createElement("div");
-        titre = document.createElement('h3');
-        titre.textContent = TableauAnnee[i];
-        img = document.createElement('div');
-        surImage = document.createElement('div')
-        img.className = "lesImages";
-        nvAnnee.className = "lesAnnee";
-        for(let j = 0;j < lesPhotosChoisis.length;j++){
-            if(lesPhotosChoisis[j].annee == TableauAnnee[i]){      
-                imageEnClair = document.createElement('img');
-                surImage = document.createElement('div')
-                imageEnClair.src = lesPhotosChoisis[j].source;
-                surImage.appendChild(imageEnClair)
-                img.appendChild(surImage)
+        TableauAnnee = [...new Set(TableauAnnee)];
+        TableauAnnee = TableauAnnee.sort((a, b) => a - b);
+        for(let i = 0;i < TableauAnnee.length;i++){
+            nvAnnee = document.createElement("div");
+            titre = document.createElement('h3');
+            titre.textContent = TableauAnnee[i];
+            img = document.createElement('div');
+            surImage = document.createElement('div')
+            img.className = "lesImages";
+            nvAnnee.className = "lesAnnee";
+            for(let j = 0;j < lesPhotosChoisis.length;j++){
+                if(lesPhotosChoisis[j].annee == TableauAnnee[i]){      
+                    imageEnClair = document.createElement('img');
+                    surImage = document.createElement('div')
+                    imageEnClair.src = lesPhotosChoisis[j].source;
+                    surImage.appendChild(imageEnClair)
+                    img.appendChild(surImage)
+                }
             }
+            nvAnnee.appendChild(titre);
+            nvAnnee.appendChild(img);
+            dynamicLieu.appendChild(nvAnnee);
+            dynamicLieu.scrollIntoView({behavior: 'smooth'})
         }
-        nvAnnee.appendChild(titre);
-        nvAnnee.appendChild(img);
-        dynamicLieu.appendChild(nvAnnee);
-        dynamicLieu.scrollIntoView({behavior: 'smooth'})
-    }
+    });
 });
