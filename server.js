@@ -78,9 +78,44 @@ app.post('/get-photo-trier', (req, res) => {
     console.log('Lieu:', lieu);
     console.log('Période:', periode);
 
-    // Traitez les données comme vous le souhaitez (par exemple, en les enregistrant dans une base de données)
-    
-    res.json({ message: 'Données reçues avec succès' });
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error('Erreur de connexion : ' + err.stack);
+            return res.status(500).send('Erreur de connexion à la base de données');
+        }
+
+        let query = 'SELECT * FROM photo';
+        const conditions = [];
+
+        if (annee) {
+            conditions.push(`date = ${connection.escape(annee)}`);
+        }
+        if (lieu) {
+            conditions.push(`lieu = ${connection.escape(lieu)}`);
+        }
+        if (periode) {
+            conditions.push(`periode = ${connection.escape(periode)}`);
+        }
+
+        if (conditions.length > 0) {
+            query += ' WHERE ' + conditions.join(' AND ');
+        }
+
+        console.log('SQL Query:', query);
+
+        connection.query(query, (error, results) => {
+            connection.release(); // Toujours libérer la connexion après utilisation
+            if (error) {
+                console.error('Erreur lors de la requête : ' + error.stack);
+                return res.status(500).send('Erreur lors de l\'exécution de la requête');
+            }
+
+            const lesPhotosDeBDD = results.map(result => result);
+            console.log(lesPhotosDeBDD);
+
+            res.json(lesPhotosDeBDD);
+        });
+    });
 });
 
 // Route pour gérer les requêtes AJAX
