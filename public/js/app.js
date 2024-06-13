@@ -25,6 +25,47 @@ let ValeurPeriode = '';
 let ValeurAnnee = '';
 const repApiTrieElement = fetch('/api/trie').then(response => response.json());
 // const rep = fetch('/get-photo-trier').then(response => response.json());
+function AfficherImage(photo){
+
+    console.log(photo);
+    console.log("ID de la photo :", photo.id);
+    console.log("Lieux de la photo :", photo.lieux);
+    console.log("Source de la photo :", photo.source);
+    console.log("Année de la photo :", photo.annee);
+    console.log("Période de la photo :", photo.periode);let TableauAnnee = [];
+    let nvAnnee = document.createElement("div");
+    let titre = document.createElement('h3');
+    let img = document.createElement('div');
+    let imageEnClair = document.createElement('img');
+    for(let i = 0; i < lesPhotosChoisis.length; i++){
+        TableauAnnee.push(lesPhotosChoisis[i].annee);
+    }
+    TableauAnnee = [...new Set(TableauAnnee)];
+    TableauAnnee = TableauAnnee.sort((a, b) => a - b);
+    for(let i = 0;i < TableauAnnee.length;i++){
+        nvAnnee = document.createElement("div");
+        titre = document.createElement('h3');
+        titre.textContent = TableauAnnee[i];
+        img = document.createElement('div');
+        surImage = document.createElement('div')
+        img.className = "lesImages";
+        nvAnnee.className = "lesAnnee";
+        for(let j = 0;j < lesPhotosChoisis.length;j++){
+            if(lesPhotosChoisis[j].annee == TableauAnnee[i]){      
+                imageEnClair = document.createElement('img');
+                surImage = document.createElement('div')
+                imageEnClair.src = lesPhotosChoisis[j].source;
+                surImage.appendChild(imageEnClair)
+                img.appendChild(surImage)
+            }
+        }
+        nvAnnee.appendChild(titre);
+        nvAnnee.appendChild(img);
+        dynamicLieu.appendChild(nvAnnee);
+        dynamicLieu.scrollIntoView({behavior: 'smooth'})
+    }
+    lesPhotosChoisis = [];
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -152,46 +193,50 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             for(let i = 0;i < data.length;i++){
-                const photo = new photos(data[i].id , data[i].lieu , data[i].date, data[i].chemin, data[i].periode);
+                const photo = new photos(data[i].id , data[i].lieu , data[i].chemin, data[i].date, data[i].periode);
                 lesPhotosChoisis.push(photo)
             }
             console.log('Succès:', data);
+            for (let i = 0; i < lesPhotosChoisis.length; i++) {
+                AfficherImage(lesPhotosChoisis[i])
+                        
+            }
         })
         .catch((error) => {
             console.error('Erreur:', error);
         });
         
-        let TableauAnnee = [];
-        let nvAnnee = document.createElement("div");
-        let titre = document.createElement('h3');
-        let img = document.createElement('div');
-        let imageEnClair = document.createElement('img');
-        for(let i = 0; i < lesPhotosChoisis.length; i++){
-            TableauAnnee.push(lesPhotosChoisis[i].annee);
-        }
-        TableauAnnee = [...new Set(TableauAnnee)];
-        TableauAnnee = TableauAnnee.sort((a, b) => a - b);
-        for(let i = 0;i < TableauAnnee.length;i++){
-            nvAnnee = document.createElement("div");
-            titre = document.createElement('h3');
-            titre.textContent = TableauAnnee[i];
-            img = document.createElement('div');
-            surImage = document.createElement('div')
-            img.className = "lesImages";
-            nvAnnee.className = "lesAnnee";
-            for(let j = 0;j < lesPhotosChoisis.length;j++){
-                if(lesPhotosChoisis[j].annee == TableauAnnee[i]){      
-                    imageEnClair = document.createElement('img');
-                    surImage = document.createElement('div')
-                    imageEnClair.src = lesPhotosChoisis[j].source;
-                    surImage.appendChild(imageEnClair)
-                    img.appendChild(surImage)
-                }
-            }
-            nvAnnee.appendChild(titre);
-            nvAnnee.appendChild(img);
-            dynamicLieu.appendChild(nvAnnee);
-            dynamicLieu.scrollIntoView({behavior: 'smooth'})
-        }
+        // let TableauAnnee = [];
+        // let nvAnnee = document.createElement("div");
+        // let titre = document.createElement('h3');
+        // let img = document.createElement('div');
+        // let imageEnClair = document.createElement('img');
+        // for(let i = 0; i < lesPhotosChoisis.length; i++){
+        //     TableauAnnee.push(lesPhotosChoisis[i].annee);
+        // }
+        // TableauAnnee = [...new Set(TableauAnnee)];
+        // TableauAnnee = TableauAnnee.sort((a, b) => a - b);
+        // for(let i = 0;i < TableauAnnee.length;i++){
+        //     nvAnnee = document.createElement("div");
+        //     titre = document.createElement('h3');
+        //     titre.textContent = TableauAnnee[i];
+        //     img = document.createElement('div');
+        //     surImage = document.createElement('div')
+        //     img.className = "lesImages";
+        //     nvAnnee.className = "lesAnnee";
+        //     for(let j = 0;j < lesPhotosChoisis.length;j++){
+        //         if(lesPhotosChoisis[j].annee == TableauAnnee[i]){      
+        //             imageEnClair = document.createElement('img');
+        //             surImage = document.createElement('div')
+        //             imageEnClair.src = lesPhotosChoisis[j].source;
+        //             surImage.appendChild(imageEnClair)
+        //             img.appendChild(surImage)
+        //         }
+        //     }
+        //     nvAnnee.appendChild(titre);
+        //     nvAnnee.appendChild(img);
+        //     dynamicLieu.appendChild(nvAnnee);
+        //     dynamicLieu.scrollIntoView({behavior: 'smooth'})
+        // }
     });
 });
