@@ -25,14 +25,9 @@ let ValeurPeriode = '';
 let ValeurAnnee = '';
 const repApiTrieElement = fetch('/api/trie').then(response => response.json());
 // const rep = fetch('/get-photo-trier').then(response => response.json());
-function AfficherImage(photo){
+function AfficherImage(){
 
-    console.log(photo);
-    console.log("ID de la photo :", photo.id);
-    console.log("Lieux de la photo :", photo.lieux);
-    console.log("Source de la photo :", photo.source);
-    console.log("Année de la photo :", photo.annee);
-    console.log("Période de la photo :", photo.periode);let TableauAnnee = [];
+    let TableauAnnee = [];
     let nvAnnee = document.createElement("div");
     let titre = document.createElement('h3');
     let img = document.createElement('div');
@@ -62,6 +57,7 @@ function AfficherImage(photo){
                 let saisonImage = document.createElement('p');
                 saisonImage.textContent = "Saison : "+lesPhotosChoisis[j].periode
                 imageEnClair.src = lesPhotosChoisis[j].source;
+                imageEnClair.loading = "lazy"
                 descriptionImage.appendChild(saisonImage);
                 descriptionImage.appendChild(categorieImage);
                 surImage.appendChild(imageEnClair);
@@ -125,10 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lieu : ValeurLieu,
             periode : ValeurPeriode
         }
-        console.log(ValeurAnnee);
-        console.log(ValeurLieu);
-        console.log(ValeurPeriode);
-        console.log(formData);
+        
         fetch('/get-photo-trier', {
             method: 'POST',
             headers: {
@@ -160,13 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
         menuTrie.style.display = 'flex';
     });
     
-    // lesPhotos = lesPhotos
+
     boutonValide.addEventListener('click',()=>{
         while (dynamicLieu.firstChild) {
             dynamicLieu.removeChild(dynamicLieu.firstChild);
         }
-        // lesPhotos = [];
-        // lesPhotosChoisis.length = 0;
+        
         menuTrie.style.display = 'none';
 
         ValeurAnnee = datePhoto.value;
@@ -197,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             console.log('Succès:', data);
             for (let i = 0; i < lesPhotosChoisis.length; i++) {
-                AfficherImage(lesPhotosChoisis[i])
+                AfficherImage()
                         
             }
         })

@@ -11,8 +11,8 @@
     justify-content: space-around;
     align-items: center;
     height: 10%;
-    background: rgba(255, 255, 255, 0.3); /* Gris avec une transparence de 50% */
-    backdrop-filter: blur(5px); /* Ajoute un flou à l'arrière-plan */
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
 }
 
 .animRegeneration{
@@ -253,4 +253,14 @@ select{
         opacity: 1;
         transform: translateY(0px);
     }
+}
+
+footer{
+    background-color: black;
+    height: 70px;
+    color: aliceblue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
