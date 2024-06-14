@@ -37,6 +37,7 @@ function AfficherImage(photo){
     let titre = document.createElement('h3');
     let img = document.createElement('div');
     let imageEnClair = document.createElement('img');
+    let descriptionImage = document.createElement('div');
     for(let i = 0; i < lesPhotosChoisis.length; i++){
         TableauAnnee.push(lesPhotosChoisis[i].annee);
     }
@@ -54,9 +55,11 @@ function AfficherImage(photo){
             if(lesPhotosChoisis[j].annee == TableauAnnee[i]){      
                 imageEnClair = document.createElement('img');
                 surImage = document.createElement('div')
+                descriptionImage = document.createElement('section')
                 imageEnClair.src = lesPhotosChoisis[j].source;
                 surImage.appendChild(imageEnClair)
                 img.appendChild(surImage)
+                surImage.appendChild(descriptionImage)
             }
         }
         nvAnnee.appendChild(titre);
