@@ -10,6 +10,7 @@ class photos {
 
 // let lesPhotos = [poto1,poto2,poto3,poto5,poto6,poto9,poto10];
 let lesPhotosChoisis = [];
+let photosAfficher;
 let dynamicLieu = document.getElementById('champDynamique');
 let boutonTrie = document.getElementById('btnTrie');
 let menuTrie = document.getElementById('MenuTrie');
@@ -54,8 +55,9 @@ function AfficherImage(photo){
         for(let j = 0;j < lesPhotosChoisis.length;j++){
             if(lesPhotosChoisis[j].annee == TableauAnnee[i]){      
                 imageEnClair = document.createElement('img');
-                surImage = document.createElement('div')
-                descriptionImage = document.createElement('section')
+                surImage = document.createElement('div');
+                descriptionImage = document.createElement('section');
+                descriptionImage.className = "uneImage";
                 imageEnClair.src = lesPhotosChoisis[j].source;
                 surImage.appendChild(imageEnClair)
                 img.appendChild(surImage)
@@ -68,6 +70,8 @@ function AfficherImage(photo){
         dynamicLieu.scrollIntoView({behavior: 'smooth'})
     }
     lesPhotosChoisis = [];
+    photosAfficher = document.querySelectorAll('.uneImage');
+    console.log(photosAfficher);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
