@@ -58,20 +58,32 @@ function AfficherImage(photo){
                 surImage = document.createElement('div');
                 descriptionImage = document.createElement('section');
                 descriptionImage.className = "uneImage";
+                let categorieImage = document.createElement('p');
+                categorieImage.textContent ="Catégorie : " +lesPhotosChoisis[j].lieux;
+                let saisonImage = document.createElement('p');
+                saisonImage.textContent = "Saison : "+lesPhotosChoisis[j].periode
                 imageEnClair.src = lesPhotosChoisis[j].source;
-                surImage.appendChild(imageEnClair)
-                img.appendChild(surImage)
-                surImage.appendChild(descriptionImage)
+                descriptionImage.appendChild(saisonImage);
+                descriptionImage.appendChild(categorieImage);
+                surImage.appendChild(imageEnClair);
+                img.appendChild(surImage);
+                surImage.appendChild(descriptionImage);
             }
         }
         nvAnnee.appendChild(titre);
         nvAnnee.appendChild(img);
         dynamicLieu.appendChild(nvAnnee);
-        dynamicLieu.scrollIntoView({behavior: 'smooth'})
+        dynamicLieu.scrollIntoView({behavior: 'smooth'});
     }
     lesPhotosChoisis = [];
-    photosAfficher = document.querySelectorAll('.uneImage');
-    console.log(photosAfficher);
+    // photosAfficher = document.querySelectorAll('.uneImage');
+    // console.log(photosAfficher);
+    // photosAfficher.forEach(function(photo) {
+    //     // Faire quelque chose avec chaque élément, par exemple, afficher son contenu
+    //     photo.addEventListener('click',()=>{
+    //         console.log("helloworld");
+    //     })
+    // });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -212,38 +224,5 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch((error) => {
             console.error('Erreur:', error);
         });
-        
-        // let TableauAnnee = [];
-        // let nvAnnee = document.createElement("div");
-        // let titre = document.createElement('h3');
-        // let img = document.createElement('div');
-        // let imageEnClair = document.createElement('img');
-        // for(let i = 0; i < lesPhotosChoisis.length; i++){
-        //     TableauAnnee.push(lesPhotosChoisis[i].annee);
-        // }
-        // TableauAnnee = [...new Set(TableauAnnee)];
-        // TableauAnnee = TableauAnnee.sort((a, b) => a - b);
-        // for(let i = 0;i < TableauAnnee.length;i++){
-        //     nvAnnee = document.createElement("div");
-        //     titre = document.createElement('h3');
-        //     titre.textContent = TableauAnnee[i];
-        //     img = document.createElement('div');
-        //     surImage = document.createElement('div')
-        //     img.className = "lesImages";
-        //     nvAnnee.className = "lesAnnee";
-        //     for(let j = 0;j < lesPhotosChoisis.length;j++){
-        //         if(lesPhotosChoisis[j].annee == TableauAnnee[i]){      
-        //             imageEnClair = document.createElement('img');
-        //             surImage = document.createElement('div')
-        //             imageEnClair.src = lesPhotosChoisis[j].source;
-        //             surImage.appendChild(imageEnClair)
-        //             img.appendChild(surImage)
-        //         }
-        //     }
-        //     nvAnnee.appendChild(titre);
-        //     nvAnnee.appendChild(img);
-        //     dynamicLieu.appendChild(nvAnnee);
-        //     dynamicLieu.scrollIntoView({behavior: 'smooth'})
-        // }
     });
 });
