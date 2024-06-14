@@ -8,7 +8,6 @@ class photos {
     }
 }
 
-// let lesPhotos = [poto1,poto2,poto3,poto5,poto6,poto9,poto10];
 let lesPhotosChoisis = [];
 let photosAfficher;
 let dynamicLieu = document.getElementById('champDynamique');
@@ -76,14 +75,6 @@ function AfficherImage(photo){
         dynamicLieu.scrollIntoView({behavior: 'smooth'});
     }
     lesPhotosChoisis = [];
-    // photosAfficher = document.querySelectorAll('.uneImage');
-    // console.log(photosAfficher);
-    // photosAfficher.forEach(function(photo) {
-    //     // Faire quelque chose avec chaque élément, par exemple, afficher son contenu
-    //     photo.addEventListener('click',()=>{
-    //         console.log("helloworld");
-    //     })
-    // });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -123,36 +114,44 @@ document.addEventListener('DOMContentLoaded', () => {
         while (dynamicLieu.firstChild) {
             dynamicLieu.removeChild(dynamicLieu.firstChild);
         }
-        rep.then(data =>{
-            let nvAnnee = document.createElement("div");
-            let titre = document.createElement('h3');
-            let img = document.createElement('div');
-            let imageEnClair = document.createElement('img');
-            lesPhotos = lesPhotos;
-            let TableauAnnee = data.dates;
-            console.log(TableauAnnee);
-            for(let i = 0;i < TableauAnnee.length;i++){
-                nvAnnee = document.createElement("div");
-                titre = document.createElement('h3');
-                titre.textContent = TableauAnnee[i];
-                img = document.createElement('div');
-                img.className = "lesImages";
-                nvAnnee.className = "lesAnnee";
-                
-                for(let j = 0;j < lesPhotos.length;j++){
-                    if(lesPhotos[j].annee == TableauAnnee[i]){        
-                        imageEnClair = document.createElement('img');
-                        surImage = document.createElement('div');
-                        imageEnClair.src = lesPhotos[j].source;
-                        surImage.appendChild(imageEnClair)
-                        img.appendChild(surImage)
-                    }
-                }
-                nvAnnee.appendChild(titre);
-                nvAnnee.appendChild(img);
-                dynamicLieu.appendChild(nvAnnee);
-                dynamicLieu.scrollIntoView({behavior: 'smooth'})
+        // lesPhotos = [];
+        // lesPhotosChoisis.length = 0;
+        menuTrie.style.display = 'none';
+
+        ValeurAnnee = "";
+        ValeurLieu = "";
+        ValeurPeriode = "";
+
+        const formData = {
+            annee : ValeurAnnee,
+            lieu : ValeurLieu,
+            periode : ValeurPeriode
+        }
+        console.log(ValeurAnnee);
+        console.log(ValeurLieu);
+        console.log(ValeurPeriode);
+        console.log(formData);
+        fetch('/get-photo-trier', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            for(let i = 0;i < data.length;i++){
+                const photo = new photos(data[i].id , data[i].lieu , data[i].chemin, data[i].date, data[i].periode);
+                lesPhotosChoisis.push(photo)
             }
+            console.log('Succès:', data);
+            for (let i = 0; i < lesPhotosChoisis.length; i++) {
+                AfficherImage(lesPhotosChoisis[i])
+                        
+            }
+        })
+        .catch((error) => {
+            console.error('Erreur:', error);
         });
     
     })
