@@ -29,6 +29,7 @@
     justify-content: space-around;
     align-items: center;
     min-width: 240px;
+    box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.61);
 }
 
 #btnAll,#btnTrie{
