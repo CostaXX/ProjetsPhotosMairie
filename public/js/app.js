@@ -109,8 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erreur lors de la récupération des dates:', error);
         });
     boutonAfficherTout.addEventListener('click',() => {
-        fixeSection.style.display = 'flex';
-        fixeSection.classList.toggle('animRegeneration')
         while (dynamicLieu.firstChild) {
             dynamicLieu.removeChild(dynamicLieu.firstChild);
         }
@@ -162,25 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
         menuTrie.style.display = 'flex';
     });
     
-    document.getElementById('ajaxButton').addEventListener('click', function() {
-        fetch('/get-photo')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('La requête a échoué avec le statut ' + response.status);
-                }
-                return response.json();
-            }).then(data => {
-                // Traiter les données ici
-                console.log(data);
-            })
-            console.log('cest cliqué');
-            console.log(lesPhotosChoisis);
-    });
-    
     // lesPhotos = lesPhotos
     boutonValide.addEventListener('click',()=>{
-        fixeSection.style.display = 'flex';
-        fixeSection.classList.toggle('animRegeneration')
         while (dynamicLieu.firstChild) {
             dynamicLieu.removeChild(dynamicLieu.firstChild);
         }
