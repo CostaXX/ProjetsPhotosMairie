@@ -126,7 +126,7 @@ app.get('/get-photo', (req, res) => {
             return res.status(500).send('Erreur de connexion à la base de données');
         }
 
-        connection.query('SELECT chemin FROM photo', (error, results) => {
+        connection.query('SELECT * FROM photo', (error, results) => {
             connection.release(); // Toujours libérer la connexion après utilisation
 
             if (error) {
@@ -134,7 +134,7 @@ app.get('/get-photo', (req, res) => {
                 return res.status(500).send('Erreur lors de l\'exécution de la requête');
             }
 
-            const lesPhotosDeBDD = results.map(result => result.chemin);
+            const lesPhotosDeBDD = results.map(result => result);
             console.log(lesPhotosDeBDD);
 
             res.json(lesPhotosDeBDD);
