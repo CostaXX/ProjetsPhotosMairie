@@ -21,6 +21,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(cookieParser());
+app.use((req, res, next) => {
+    res.set('Cache-Control', 'no-store');
+    next();
+});
 
 app.get('/api/trie', (req, res) => {
     pool.getConnection((err, connection) => {
