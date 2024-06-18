@@ -56,7 +56,7 @@ function AfficherImage(){
                 categorieImage.textContent ="Catégorie : " +lesPhotosChoisis[j].lieux;
                 let saisonImage = document.createElement('p');
                 saisonImage.textContent = "Saison : "+lesPhotosChoisis[j].periode
-                imageEnClair.src = lesPhotosChoisis[j].source;
+                imageEnClair.src= lesPhotosChoisis[j].source;
                 imageEnClair.loading = "lazy"
                 descriptionImage.appendChild(saisonImage);
                 descriptionImage.appendChild(categorieImage);
@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         fetch('/get-photo-trier', {
             method: 'POST',
+            cache: 'no-store',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -176,6 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(formData);
         fetch('/get-photo-trier', {
             method: 'POST',
+            cache: "no-store",
             headers: {
                 'Content-Type': 'application/json'
             },
