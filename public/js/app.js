@@ -1,3 +1,5 @@
+
+
 class photos {
     constructor(id,lieux,source,annee,periode){
         this.id = id,
@@ -54,11 +56,8 @@ function AfficherImage(){
                 descriptionImage.className = "uneImage";
                 let categorieImage = document.createElement('p');
                 categorieImage.textContent ="Catégorie : " +lesPhotosChoisis[j].lieux;
-                let saisonImage = document.createElement('p');
-                saisonImage.textContent = "Saison : "+lesPhotosChoisis[j].periode
-                imageEnClair.src= lesPhotosChoisis[j].source;
+                imageEnClair.src = lesPhotosChoisis[j].source;
                 imageEnClair.loading = "lazy"
-                descriptionImage.appendChild(saisonImage);
                 descriptionImage.appendChild(categorieImage);
                 surImage.appendChild(imageEnClair);
                 img.appendChild(surImage);
@@ -74,7 +73,28 @@ function AfficherImage(){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+    let lazyImagesObserver;
+    // Fonction pour initialiser l'Intersection Observer
+    function initIntersectionObserver() {
+        const options = {
+            root: null, // Utiliser le viewport du navigateur comme racine
+            rootMargin: "0px", // Pas de marge autour de la racine
+            threshold: 0.1 // Appeler le callback quand 10% de l'image est visible
+        };
+
+        lazyImagesObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.src; // Charger l'image
+                    img.removeAttribute('src'); // Supprimer l'attribut data-src
+                    observer.unobserve(img); // Arrêter d'observer cette image
+                }
+            });
+        }, options);
+    }
+
+    initIntersectionObserver();
     repApiTrieElement.then(data => {
             let categDate = document.getElementById('datePhoto')
             let lesDates;
@@ -84,14 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 lesDates.value = data.dates[i];
                 categDate.appendChild(lesDates);
             }
-            let categPeriode = document.getElementById('periodePhoto')
-            let lesPeriodes;
-            for(let i = 0;i < data.periodes.length;i++){
-                lesPeriodes = document.createElement('option');
-                lesPeriodes.textContent = data.periodes[i];
-                lesPeriodes.value = data.periodes[i];
-                categPeriode.appendChild(lesPeriodes);
-            }
+            // let categPeriode = document.getElementById('periodePhoto')
+            // let lesPeriodes;
+            // for(let i = 0;i < data.periodes.length;i++){
+            //     lesPeriodes = document.createElement('option');
+            //     lesPeriodes.textContent = data.periodes[i];
+            //     lesPeriodes.value = data.periodes[i];
+            //     categPeriode.appendChild(lesPeriodes);
+            // }
             let categLieu = document.getElementById('lieuPhoto')
             let lesLieux;
             for(let i = 0;i < data.lieux.length;i++){
@@ -114,12 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ValeurAnnee = "";
         ValeurLieu = "";
-        ValeurPeriode = "";
 
         const formData = {
             annee : ValeurAnnee,
             lieu : ValeurLieu,
-            periode : ValeurPeriode
         }
         
         fetch('/get-photo-trier', {
@@ -164,12 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ValeurAnnee = datePhoto.value;
         ValeurLieu = lieuPhoto.value;
-        ValeurPeriode = periodePhoto.value;
+        
 
         const formData = {
             annee : ValeurAnnee,
-            lieu : ValeurLieu,
-            periode : ValeurPeriode
+            lieu : ValeurLieu
         }
         console.log(ValeurAnnee);
         console.log(ValeurLieu);

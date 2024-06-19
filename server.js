@@ -96,9 +96,7 @@ app.post('/get-photo-trier', (req, res) => {
         if (annee) {
             conditions.push(`date = ${connection.escape(annee)}`);
         }
-        if (lieu) {
-            conditions.push(`lieu = ${connection.escape(lieu)}`);
-        }
+        
         if (periode) {
             conditions.push(`periode = ${connection.escape(periode)}`);
         }
