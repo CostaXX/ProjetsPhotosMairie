@@ -1,5 +1,3 @@
-
-
 class photos {
     constructor(id,lieux,source,annee,periode){
         this.id = id,
@@ -28,9 +26,30 @@ let ValeurPeriode = '';
 let ValeurAnneePrec = '';
 let ValeurAnneeSuiv = '';
 const repApiTrieElement = fetch('/api/trie').then(response => response.json());
-// const rep = fetch('/get-photo-trier').then(response => response.json());
+
+function smoothScrollToTop() {
+    return new Promise((resolve) => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        setTimeout(resolve, 300); 
+    });
+}
+
+function smoothScrollToBottom() {
+    window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+    });
+}
+
 function AfficherImage(){
 
+}
+
+function AfficherAnneeImage(){
+    
     let TableauAnnee = [];
     let nvAnnee = document.createElement("div");
     let titre = document.createElement('h3');
@@ -43,6 +62,7 @@ function AfficherImage(){
     TableauAnnee = [...new Set(TableauAnnee)];
     TableauAnnee = TableauAnnee.sort((a, b) => a - b);
     for(let i = 0;i < TableauAnnee.length;i++){
+        
         nvAnnee = document.createElement("div");
         titre = document.createElement('h3');
         titre.textContent = TableauAnnee[i];
@@ -64,17 +84,19 @@ function AfficherImage(){
                 surImage.appendChild(imageEnClair);
                 img.appendChild(surImage);
                 surImage.appendChild(descriptionImage);
+                
             }
         }
         nvAnnee.appendChild(titre);
         nvAnnee.appendChild(img);
         dynamicLieu.appendChild(nvAnnee);
-        dynamicLieu.scrollIntoView({behavior: 'smooth'});
+        
     }
-    lesPhotosChoisis = [];
+    // lesPhotosChoisis = [];
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    
     let lazyImagesObserver;
     // Fonction pour initialiser l'Intersection Observer
     function initIntersectionObserver() {
@@ -114,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 lesDates.value = data.dates[i];
                 categDateSuiv.appendChild(lesDates);
             }
-            
+
             let categLieu = document.getElementById('lieuPhoto')
             let lesLieux;
             for(let i = 0;i < data.lieux.length;i++){
@@ -153,21 +175,41 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
+            if(lesPhotosChoisis.length > 0){
+                lesPhotosChoisis = []
+            }
             for(let i = 0;i < data.length;i++){
                 const photo = new photos(data[i].id , data[i].lieu , data[i].chemin, data[i].date, data[i].periode);
                 lesPhotosChoisis.push(photo)
             }
+            
+            console.log(lesPhotosChoisis);
             console.log('Succès:', data);
-            for (let i = 0; i < lesPhotosChoisis.length; i++) {
-                AfficherImage(lesPhotosChoisis[i])
-                        
-            }
+            
+                
+            
+            console.log(lesPhotosChoisis);
+            
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: 'smooth'
+            });
         })
         .catch((error) => {
             console.error('Erreur:', error);
         });
-    
+        
     })
+    window.addEventListener('scroll',() => {
+        const documentHeight = document.documentElement.scrollHeight;
+        const windowHeight = window.innerHeight;
+        const scrollPosition = window.scrollY;
+        if (scrollPosition + windowHeight >= documentHeight) {
+            console.log('Vous êtes tout en bas de la page!');
+            AfficherAnneeImage();
+        }
+    })
+
     boutonQuitte.addEventListener('click',()=>{
         menuTrie.style.display = 'none';
     });
@@ -176,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
 
-    boutonValide.addEventListener('click',()=>{
+    boutonValide.addEventListener('click',async ()=>{
         while (dynamicLieu.firstChild) {
             dynamicLieu.removeChild(dynamicLieu.firstChild);
         }
@@ -207,18 +249,23 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
+            if(lesPhotosChoisis.length > 0){
+                lesPhotosChoisis = []
+            }
             for(let i = 0;i < data.length;i++){
                 const photo = new photos(data[i].id , data[i].lieu , data[i].chemin, data[i].date, data[i].periode);
                 lesPhotosChoisis.push(photo)
             }
             console.log('Succès:', data);
-            for (let i = 0; i < lesPhotosChoisis.length; i++) {
-                AfficherImage()
-                        
-            }
+            
+            // for (let i = 0; i < lesPhotosChoisis.length; i++) {
+                AfficherImage()  
+            // }
         })
         .catch((error) => {
             console.error('Erreur:', error);
         });
+        await smoothScrollToTop();
+        smoothScrollToBottom();
     });
 });
