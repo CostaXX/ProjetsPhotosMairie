@@ -202,6 +202,7 @@ select{
     width:110px;
     padding: 10px;
     border: none;
+    margin-inline: 10px;
     border-radius: 10px;
     cursor: pointer;
 }
@@ -229,6 +230,7 @@ select{
     display: flex;
     justify-content: space-between;
     width: 240px;
+    align-items: center;
 }
 
 /* Animation */

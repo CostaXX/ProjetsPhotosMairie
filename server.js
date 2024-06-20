@@ -9,7 +9,7 @@ const mysql = require('mysql2'); // ou utilisez 'mysql2' si vous avez installé 
 const pool = mysql.createPool({
     host: 'localhost', 
     user: 'root',      
-    password: '',      
+    password: '',
     database: 'photos', 
     waitForConnections: true,
     connectionLimit: 10, // Limite le nombre de connexions simultanées
@@ -79,10 +79,10 @@ app.get('/api/trie', (req, res) => {
 
 app.post('/get-photo-trier', (req, res) => {
     console.log(req.body);
-    const { annee, lieu, periode } = req.body;
-    console.log('Année:', annee);
+    const { anneeDebut,anneeFin ,lieu } = req.body;
+    console.log('Année debut:', anneeDebut);
+    console.log('Année fin', anneeFin);
     console.log('Lieu:', lieu);
-    console.log('Période:', periode);
 
     pool.getConnection((err, connection) => {
         if (err) {
@@ -93,17 +93,25 @@ app.post('/get-photo-trier', (req, res) => {
         let query = 'SELECT * FROM photo';
         const conditions = [];
 
-        if (annee) {
-            conditions.push(`date = ${connection.escape(annee)}`);
+        if (anneeDebut && anneeFin) {
+            conditions.push(`date BETWEEN ${connection.escape(anneeDebut)} AND ${connection.escape(anneeFin)}`);
+        }else if(anneeDebut && !anneeFin){
+            conditions.push(`date = ${connection.escape(anneeDebut)}`)
+        }else if(!anneeDebut && anneeFin){
+            conditions.push(`date = ${connection.escape(anneeFin)}`)
+        }else if(!anneeDebut && !anneeFin){
+
         }
         
-        if (periode) {
-            conditions.push(`periode = ${connection.escape(periode)}`);
+        if (lieu) {
+            conditions.push(`lieu = ${connection.escape(lieu)}`);
         }
 
         if (conditions.length > 0) {
             query += ' WHERE ' + conditions.join(' AND ');
         }
+
+        query+= ' ORDER BY date ASC'
 
         console.log('SQL Query:', query);
 
@@ -115,7 +123,7 @@ app.post('/get-photo-trier', (req, res) => {
             }
 
             const lesPhotosDeBDD = results.map(result => result);
-            console.log(lesPhotosDeBDD);
+            // console.log(lesPhotosDeBDD);
 
             res.json(lesPhotosDeBDD);
         });
@@ -130,7 +138,7 @@ app.get('/get-photo', (req, res) => {
             return res.status(500).send('Erreur de connexion à la base de données');
         }
 
-        connection.query('SELECT * FROM photo', (error, results) => {
+        connection.query('SELECT * FROM photo LIMIT 100', (error, results) => {
             connection.release(); // Toujours libérer la connexion après utilisation
 
             if (error) {

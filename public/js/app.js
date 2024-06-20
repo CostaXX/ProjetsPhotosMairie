@@ -18,13 +18,15 @@ let menuTrie = document.getElementById('MenuTrie');
 let boutonQuitte = document.getElementById('QuitBtn');
 let boutonAfficherTout = document.getElementById('btnAll');
 let boutonValide = document.getElementById('btnValiderTrie');
-let datePhoto = document.getElementById('datePhoto');
+let datePhotoPrec = document.getElementById('datePhotoPrec');
+let datePhotoSuiv = document.getElementById('datePhotoSuiv');
 let periodePhoto = document.getElementById('periodePhoto');
 let lieuPhoto = document.getElementById('lieuPhoto');
 let fixeSection = document.getElementById('SectionRegeneration');
 let ValeurLieu = '';
 let ValeurPeriode = '';
-let ValeurAnnee = '';
+let ValeurAnneePrec = '';
+let ValeurAnneeSuiv = '';
 const repApiTrieElement = fetch('/api/trie').then(response => response.json());
 // const rep = fetch('/get-photo-trier').then(response => response.json());
 function AfficherImage(){
@@ -96,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initIntersectionObserver();
     repApiTrieElement.then(data => {
-            let categDate = document.getElementById('datePhoto')
+            let categDate = document.getElementById('datePhotoPrec')
             let lesDates;
             for(let i = 0;i < data.dates.length;i++){
                 lesDates = document.createElement('option');
@@ -104,14 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 lesDates.value = data.dates[i];
                 categDate.appendChild(lesDates);
             }
-            // let categPeriode = document.getElementById('periodePhoto')
-            // let lesPeriodes;
-            // for(let i = 0;i < data.periodes.length;i++){
-            //     lesPeriodes = document.createElement('option');
-            //     lesPeriodes.textContent = data.periodes[i];
-            //     lesPeriodes.value = data.periodes[i];
-            //     categPeriode.appendChild(lesPeriodes);
-            // }
+            let categDateSuiv = document.getElementById('datePhotoSuiv')
+            
+            for(let i = 0;i < data.dates.length;i++){
+                lesDates = document.createElement('option');
+                lesDates.textContent = data.dates[i];
+                lesDates.value = data.dates[i];
+                categDateSuiv.appendChild(lesDates);
+            }
+            
             let categLieu = document.getElementById('lieuPhoto')
             let lesLieux;
             for(let i = 0;i < data.lieux.length;i++){
@@ -180,17 +183,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         menuTrie.style.display = 'none';
 
-        ValeurAnnee = datePhoto.value;
+        ValeurAnneePrec = datePhotoPrec.value;
+        ValeurAnneeSuiv = datePhotoSuiv.value;
         ValeurLieu = lieuPhoto.value;
         
 
         const formData = {
-            annee : ValeurAnnee,
+            anneeDebut : ValeurAnneePrec,
+            anneeFin : ValeurAnneeSuiv,
             lieu : ValeurLieu
         }
-        console.log(ValeurAnnee);
+        console.log(ValeurAnneePrec);
+        console.log(ValeurAnneeSuiv);
         console.log(ValeurLieu);
-        console.log(ValeurPeriode);
         console.log(formData);
         fetch('/get-photo-trier', {
             method: 'POST',
