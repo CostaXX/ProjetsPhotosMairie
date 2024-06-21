@@ -9,23 +9,39 @@ class photos {
 }
 
 let lesPhotosChoisis = [];
-let photosAfficher;
-let dynamicLieu = document.getElementById('champDynamique');
-let boutonTrie = document.getElementById('btnTrie');
-let menuTrie = document.getElementById('MenuTrie');
-let boutonQuitte = document.getElementById('QuitBtn');
-let boutonAfficherTout = document.getElementById('btnAll');
-let boutonValide = document.getElementById('btnValiderTrie');
-let datePhotoPrec = document.getElementById('datePhotoPrec');
-let datePhotoSuiv = document.getElementById('datePhotoSuiv');
-let periodePhoto = document.getElementById('periodePhoto');
-let lieuPhoto = document.getElementById('lieuPhoto');
-let fixeSection = document.getElementById('SectionRegeneration');
+const dynamicLieu = document.getElementById('champDynamique');
+const boutonTrie = document.getElementById('btnTrie');
+const menuTrie = document.getElementById('MenuTrie');
+const boutonQuitte = document.getElementById('QuitBtn');
+const boutonAfficherTout = document.getElementById('btnAll');
+const boutonValide = document.getElementById('btnValiderTrie');
+const datePhotoPrec = document.getElementById('datePhotoPrec');
+const datePhotoSuiv = document.getElementById('datePhotoSuiv');
+const periodePhoto = document.getElementById('periodePhoto');
+const lieuPhoto = document.getElementById('lieuPhoto');
+const fixeSection = document.getElementById('SectionRegeneration');
 let ValeurLieu = '';
 let ValeurPeriode = '';
 let ValeurAnneePrec = '';
 let ValeurAnneeSuiv = '';
 const repApiTrieElement = fetch('/api/trie').then(response => response.json());
+
+function waitForScrollToBottom() {
+    return new Promise((resolve) => {
+        function onScroll() {
+            const documentHeight = document.documentElement.scrollHeight;
+            const windowHeight = window.innerHeight;
+            const scrollPosition = window.scrollY;
+            if (scrollPosition + windowHeight >= documentHeight) {
+                window.removeEventListener('scroll', onScroll);
+                resolve();
+            }
+        }
+        window.addEventListener('scroll', onScroll);
+        console.log("vous etes en bas");
+    });
+}
+
 
 function smoothScrollToTop() {
     return new Promise((resolve) => {
@@ -44,11 +60,7 @@ function smoothScrollToBottom() {
     });
 }
 
-function AfficherImage(){
-
-}
-
-function AfficherAnneeImage(){
+async function AfficherAnneeImage(){
     
     let TableauAnnee = [];
     let nvAnnee = document.createElement("div");
@@ -61,8 +73,8 @@ function AfficherAnneeImage(){
     }
     TableauAnnee = [...new Set(TableauAnnee)];
     TableauAnnee = TableauAnnee.sort((a, b) => a - b);
+    let iMax = 0;
     for(let i = 0;i < TableauAnnee.length;i++){
-        
         nvAnnee = document.createElement("div");
         titre = document.createElement('h3');
         titre.textContent = TableauAnnee[i];
@@ -71,7 +83,7 @@ function AfficherAnneeImage(){
         img.className = "lesImages";
         nvAnnee.className = "lesAnnee";
         for(let j = 0;j < lesPhotosChoisis.length;j++){
-            if(lesPhotosChoisis[j].annee == TableauAnnee[i]){      
+            if(lesPhotosChoisis[j].annee == TableauAnnee[i]){  
                 imageEnClair = document.createElement('img');
                 surImage = document.createElement('div');
                 descriptionImage = document.createElement('section');
@@ -84,8 +96,8 @@ function AfficherAnneeImage(){
                 surImage.appendChild(imageEnClair);
                 img.appendChild(surImage);
                 surImage.appendChild(descriptionImage);
-                
             }
+            
         }
         nvAnnee.appendChild(titre);
         nvAnnee.appendChild(img);
@@ -96,60 +108,38 @@ function AfficherAnneeImage(){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-    let lazyImagesObserver;
-    // Fonction pour initialiser l'Intersection Observer
-    function initIntersectionObserver() {
-        const options = {
-            root: null, // Utiliser le viewport du navigateur comme racine
-            rootMargin: "0px", // Pas de marge autour de la racine
-            threshold: 0.1 // Appeler le callback quand 10% de l'image est visible
-        };
-
-        lazyImagesObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.src; // Charger l'image
-                    img.removeAttribute('src'); // Supprimer l'attribut data-src
-                    observer.unobserve(img); // Arrêter d'observer cette image
-                }
-            });
-        }, options);
-    }
-
-    initIntersectionObserver();
     repApiTrieElement.then(data => {
-            let categDate = document.getElementById('datePhotoPrec')
-            let lesDates;
-            for(let i = 0;i < data.dates.length;i++){
-                lesDates = document.createElement('option');
-                lesDates.textContent = data.dates[i];
-                lesDates.value = data.dates[i];
-                categDate.appendChild(lesDates);
-            }
-            let categDateSuiv = document.getElementById('datePhotoSuiv')
-            
-            for(let i = 0;i < data.dates.length;i++){
-                lesDates = document.createElement('option');
-                lesDates.textContent = data.dates[i];
-                lesDates.value = data.dates[i];
-                categDateSuiv.appendChild(lesDates);
-            }
+        let categDate = document.getElementById('datePhotoPrec')
+        let lesDates;
+        for(let i = 0;i < data.dates.length;i++){
+            lesDates = document.createElement('option');
+            lesDates.textContent = data.dates[i];
+            lesDates.value = data.dates[i];
+            categDate.appendChild(lesDates);
+        }
+        let categDateSuiv = document.getElementById('datePhotoSuiv')
+        
+        for(let i = 0;i < data.dates.length;i++){
+            lesDates = document.createElement('option');
+            lesDates.textContent = data.dates[i];
+            lesDates.value = data.dates[i];
+            categDateSuiv.appendChild(lesDates);
+        }
 
-            let categLieu = document.getElementById('lieuPhoto')
-            let lesLieux;
-            for(let i = 0;i < data.lieux.length;i++){
-                lesLieux = document.createElement('option');
-                lesLieux.textContent = data.lieux[i];
-                lesLieux.value = data.lieux[i];
-                categLieu.appendChild(lesLieux);
-            }
-        })
-        .catch(error => {
-            console.error('Erreur lors de la récupération des dates:', error);
-        });
-    boutonAfficherTout.addEventListener('click',() => {
+        let categLieu = document.getElementById('lieuPhoto')
+        let lesLieux;
+        for(let i = 0;i < data.lieux.length;i++){
+            lesLieux = document.createElement('option');
+            lesLieux.textContent = data.lieux[i];
+            lesLieux.value = data.lieux[i];
+            categLieu.appendChild(lesLieux);
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la récupération des dates:', error);
+    });
+    boutonAfficherTout.addEventListener('click',async () => {
+        lesPhotosChoisis = [];
         while (dynamicLieu.firstChild) {
             dynamicLieu.removeChild(dynamicLieu.firstChild);
         }
@@ -190,25 +180,24 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log(lesPhotosChoisis);
             
-            window.scrollTo({
-                top: document.documentElement.scrollHeight,
-                behavior: 'smooth'
-            });
+        
         })
         .catch((error) => {
             console.error('Erreur:', error);
         });
-        
+        await smoothScrollToTop();
+        smoothScrollToBottom();
+        AfficherAnneeImage();
     })
-    window.addEventListener('scroll',() => {
-        const documentHeight = document.documentElement.scrollHeight;
-        const windowHeight = window.innerHeight;
-        const scrollPosition = window.scrollY;
-        if (scrollPosition + windowHeight >= documentHeight) {
-            console.log('Vous êtes tout en bas de la page!');
-            AfficherAnneeImage();
-        }
-    })
+    // window.addEventListener('scroll',() => {
+    //     const documentHeight = document.documentElement.scrollHeight;
+    //     const windowHeight = window.innerHeight;
+    //     const scrollPosition = window.scrollY;
+    //     if (scrollPosition + windowHeight >= documentHeight) {
+    //         console.log('Vous êtes tout en bas de la page!');
+    //         AfficherAnneeImage();
+    //     }
+    // })
 
     boutonQuitte.addEventListener('click',()=>{
         menuTrie.style.display = 'none';
@@ -219,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     boutonValide.addEventListener('click',async ()=>{
+        lesPhotosChoisis = [];
         while (dynamicLieu.firstChild) {
             dynamicLieu.removeChild(dynamicLieu.firstChild);
         }
@@ -259,7 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Succès:', data);
             
             // for (let i = 0; i < lesPhotosChoisis.length; i++) {
-                AfficherImage()  
             // }
         })
         .catch((error) => {
@@ -267,5 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         await smoothScrollToTop();
         smoothScrollToBottom();
+        AfficherAnneeImage()
     });
 });
