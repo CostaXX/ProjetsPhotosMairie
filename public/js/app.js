@@ -38,7 +38,6 @@ function waitForScrollToBottom() {
             }
         }
         window.addEventListener('scroll', onScroll);
-        console.log("vous etes en bas");
     });
 }
 
@@ -82,6 +81,8 @@ async function AfficherAnneeImage(){
         surImage = document.createElement('div')
         img.className = "lesImages";
         nvAnnee.className = "lesAnnee";
+        dynamicLieu.appendChild(nvAnnee);
+        nvAnnee.appendChild(titre);
         for(let j = 0;j < lesPhotosChoisis.length;j++){
             if(lesPhotosChoisis[j].annee == TableauAnnee[i]){  
                 imageEnClair = document.createElement('img');
@@ -96,13 +97,14 @@ async function AfficherAnneeImage(){
                 surImage.appendChild(imageEnClair);
                 img.appendChild(surImage);
                 surImage.appendChild(descriptionImage);
-            }
-            
+                nvAnnee.appendChild(img);
+                iMax++;
+                if(iMax == 20){
+                    await waitForScrollToBottom();
+                    iMax = 0
+                }
+            } 
         }
-        nvAnnee.appendChild(titre);
-        nvAnnee.appendChild(img);
-        dynamicLieu.appendChild(nvAnnee);
-        
     }
     // lesPhotosChoisis = [];
 }
@@ -172,15 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const photo = new photos(data[i].id , data[i].lieu , data[i].chemin, data[i].date, data[i].periode);
                 lesPhotosChoisis.push(photo)
             }
-            
-            console.log(lesPhotosChoisis);
-            console.log('Succès:', data);
-            
-                
-            
-            console.log(lesPhotosChoisis);
-            
-        
         })
         .catch((error) => {
             console.error('Erreur:', error);
@@ -189,15 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
         smoothScrollToBottom();
         AfficherAnneeImage();
     })
-    // window.addEventListener('scroll',() => {
-    //     const documentHeight = document.documentElement.scrollHeight;
-    //     const windowHeight = window.innerHeight;
-    //     const scrollPosition = window.scrollY;
-    //     if (scrollPosition + windowHeight >= documentHeight) {
-    //         console.log('Vous êtes tout en bas de la page!');
-    //         AfficherAnneeImage();
-    //     }
-    // })
+    
 
     boutonQuitte.addEventListener('click',()=>{
         menuTrie.style.display = 'none';
