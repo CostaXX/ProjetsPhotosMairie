@@ -7,7 +7,7 @@ const port = 3000;
 const mysql = require('mysql2'); // ou utilisez 'mysql2' si vous avez installé mysql2
 
 const pool = mysql.createPool({
-    host: 'localhost', 
+    host: '192.168.1.57', 
     user: 'root',      
     password: '',
     database: 'photos', 
