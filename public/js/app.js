@@ -99,7 +99,7 @@ async function AfficherAnneeImage(){
                 surImage.appendChild(descriptionImage);
                 nvAnnee.appendChild(img);
                 iMax++;
-                if(iMax == 20){
+                if(iMax == 10){
                     await waitForScrollToBottom();
                     iMax = 0
                 }
@@ -231,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const photo = new photos(data[i].id , data[i].lieu , data[i].chemin, data[i].date, data[i].periode);
                 lesPhotosChoisis.push(photo)
             }
-            console.log('Succès:', data);
             
             // for (let i = 0; i < lesPhotosChoisis.length; i++) {
             // }
