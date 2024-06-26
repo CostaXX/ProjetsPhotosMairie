@@ -155,6 +155,6 @@ app.get('/get-photo', (req, res) => {
 });
 
 // Démarrer le serveur
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+app.listen(port,'0.0.0.0', () => {
+    console.log(`Server is running at http://192.168.1.57:${port}`);
 });
