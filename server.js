@@ -79,7 +79,7 @@ app.get('/api/trie', (req, res) => {
 
 app.post('/get-photo-trier', (req, res) => {
     console.log(req.body);
-    const { anneeDebut,anneeFin ,lieu } = req.body;
+    const { anneeDebut ,anneeFin ,lieu } = req.body;
     console.log('Année debut:', anneeDebut);
     console.log('Année fin', anneeFin);
     console.log('Lieu:', lieu);
