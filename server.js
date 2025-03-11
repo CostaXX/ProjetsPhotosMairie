@@ -7,9 +7,9 @@ const port = 3000;
 const mysql = require('mysql2'); // ou utilisez 'mysql2' si vous avez installé mysql2
 
 const pool = mysql.createPool({
-    host: '192.168.1.57', 
-    user: 'root',      
-    password: '',
+    host: 'localhost', 
+    user: 'root',     
+    password: 'sio2025@rostand',
     database: 'photos', 
     waitForConnections: true,
     connectionLimit: 10, // Limite le nombre de connexions simultanées
@@ -156,5 +156,5 @@ app.get('/get-photo', (req, res) => {
 
 // Démarrer le serveur
 app.listen(port,'0.0.0.0', () => {
-    console.log(`Server is running at http://192.168.1.57:${port}`);
+    console.log(`Server is running at http://localhost:${port}`);
 });

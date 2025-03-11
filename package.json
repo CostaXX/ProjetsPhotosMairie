@@ -3,15 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "npm init -y\r npm install express\r node server.js\r npm install express cookie-parser\r Creer un dossier imageServer à la racine et creer un dossier img dans le dossier public\r npm install mysql2\r creation base de donnee photos avec une table photo",
   "dependencies": {
-    "cookie-parser": "^1.4.6",
-    "express": "^4.19.2",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
     "mysql2": "^3.10.0"
   }
 }
